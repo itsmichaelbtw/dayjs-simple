@@ -1,2 +1,3 @@
 # dayjs-simple
-A top-level wrapper around the dayjs package
+
+A top-level wrapper around the dayjs library
