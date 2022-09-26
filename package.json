@@ -3,8 +3,10 @@
     "version": "1.0.0",
     "description": "A top-level wrapper around the dayjs library",
     "main": "index.js",
+    "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky install"
     },
     "repository": {
         "type": "git",
@@ -21,7 +23,9 @@
         "dates"
     ],
     "devDependencies": {
-        "husky": "^8.0.1",
+        "@commitlint/cli": "^17.1.2",
+        "@commitlint/config-conventional": "^17.1.0",
+        "husky": "^8.0.0",
         "lint-staged": "^13.0.3",
         "prettier": "^2.7.1",
         "standard-version": "^9.5.0",
@@ -43,4 +47,3 @@
     "author": "Orison Networks",
     "license": "MIT"
 }
-
