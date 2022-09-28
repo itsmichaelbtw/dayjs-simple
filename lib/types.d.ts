@@ -4,7 +4,13 @@ import { MutableDate } from "./mutable-date";
 
 export type ParentLibType = dayjs.Dayjs;
 
-export type DateArgument = string | number | null | undefined | Date;
+export type DateArgument<T = any> =
+    | T
+    | string
+    | number
+    | null
+    | undefined
+    | Date;
 export type MutableDateArgument = DateArgument | MutableDate;
 export type MutableTimeZone = "local" | "utc";
 
@@ -36,6 +42,8 @@ export type OpMutableUnitType = MutableUnitType | "week" | "weeks" | "w";
 export type QMutableUnitType = MutableUnitType | "quarter" | "quarters" | "Q";
 export type ManipulateType = Exclude<OpMutableUnitType, "date" | "dates">;
 
+export type UnixUnitConversion = "milliseconds" | "seconds";
+
 export type CompareInclusivity = "()" | "(]" | "[)" | "[]";
 
 export type ObjectTypes =
@@ -48,3 +56,9 @@ export type ObjectTypes =
     | "boolean"
     | "function"
     | "date";
+
+export type OutputConversionOptions =
+    | "MutableDate"
+    | "Date"
+    | "string"
+    | "number";
