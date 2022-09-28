@@ -1,16 +1,18 @@
-import dayjs from "dayjs";
-import { DayJsArgumentInput } from "../utils";
+import { MutableDate } from "../mutable-date";
+import { argumentIsNotDefined } from "../utils";
+import { MutableDateArgument } from "../types";
 
 /**
  * returns true if the input has a valid calendar date
  */
-export function isDateValid(
-    date: DayJsArgumentInput,
-    allowStrict: boolean
-): boolean {
-    if (allowStrict) {
-        return dayjs(date, undefined, true).isValid();
+export function isDateValid(date: MutableDateArgument): boolean {
+    if (argumentIsNotDefined(date)) {
+        return false;
     }
 
-    return dayjs(date).isValid();
+    if (MutableDate.isInstance(date)) {
+        return date.isValid();
+    }
+
+    return !isNaN(new Date(date).getTime());
 }
