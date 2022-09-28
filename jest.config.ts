@@ -5,7 +5,8 @@ const Config: Config = {
         "^.+\\.ts?$": "ts-jest"
     },
     testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
-    moduleFileExtensions: ["ts", "js", "json", "node"]
+    moduleFileExtensions: ["ts", "js", "json", "node"],
+    modulePaths: ["<rootDir>/lib", "<rootDir>/node_modules"]
 };
 
 export default Config;
