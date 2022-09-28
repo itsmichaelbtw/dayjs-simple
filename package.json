@@ -5,7 +5,8 @@
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
-        "test": "jest --config jest.config.ts",
+        "test": "jest --verbose --config jest.config.ts",
+        "coverage": "jest --verbose --config jest.config.ts --coverage",
         "lint:check": "eslint lib --ignore-path .gitignore --ext .ts",
         "lint:fix": "eslint lib --ignore-path .gitignore --ext .ts --fix",
         "prettier:check": "prettier --check .",
@@ -60,4 +61,3 @@
     "author": "Orison Networks",
     "license": "MIT"
 }
-
