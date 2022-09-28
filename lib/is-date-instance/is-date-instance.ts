@@ -1,20 +1,15 @@
-import { callObjectType, DateArgumentInput } from "../utils";
+import { callObjectType, argumentIsNotDefined } from "../utils";
 
-/** returns true if the input is a date. Alternatively,
- * if a string is passed, it will check if the input
- * is an instance of new Date
- *
- * this will not validate if the input string is a
- * valid date, 50/12/2020 will still return true */
+/** checks if the input is an instance of new Date. */
 
-export function isDateInstance(date: DateArgumentInput): boolean {
-    if (date === null || date === undefined) {
+export function isDateInstance(date: any): date is Date {
+    if (argumentIsNotDefined(date)) {
         return false;
     }
 
     const objectType = callObjectType(date);
 
-    if (objectType === "[object Date]") {
+    if (objectType === "date") {
         return true;
     }
 
