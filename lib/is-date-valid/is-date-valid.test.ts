@@ -44,7 +44,7 @@ describe("isDateValid", () => {
         expect(result).toBe(false);
     });
 
-    test(`'invalid date' should be false`, () => {
+    test("'invalid date' should be false", () => {
         const result = isDateValid(new Date("invalid date"));
         expect(result).toBe(false);
     });
