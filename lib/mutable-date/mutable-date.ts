@@ -188,7 +188,11 @@ export class MutableDate {
     }
 
     format(template?: string): string {
-        return this.$currentDate.format(template);
+        if (template) {
+            return this.$currentDate.format(template);
+        }
+
+        return this.toISOString();
     }
 
     diff(
