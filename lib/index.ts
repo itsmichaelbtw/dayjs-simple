@@ -13,3 +13,4 @@ export * from "./is-date-valid";
 export * from "./unix-ts";
 export * from "./increment-date";
 export * from "./decrement-date";
+export * from "./format-date";
