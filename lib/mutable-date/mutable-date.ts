@@ -2,7 +2,8 @@ import dayjs from "dayjs";
 
 import { isDateValid } from "../is-date-valid";
 import { isDateInstance } from "../is-date-instance";
-import { argumentIsNotDefined } from "../utils";
+import { getDateDifference } from "../get-date-difference";
+import { argumentIsNotDefined, absolute, getTimezoneOffset } from "../utils";
 import {
     DateArgument,
     MutableDateArgument,
@@ -14,7 +15,8 @@ import {
     QMutableUnitType,
     ManipulateType,
     UnixUnitConversion,
-    OutputConversionOptions
+    OutputConversionOptions,
+    ParsableDuration
 } from "../types";
 
 type InvokeDayJs = (
@@ -23,17 +25,30 @@ type InvokeDayJs = (
     strict?: boolean
 ) => ParentLibType;
 
+type MutableDateAsArray = [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+];
 export class MutableDate {
-    protected $currentDate: ParentLibType;
-    protected $timezone: MutableTimeZone;
-    protected $instance: InvokeDayJs;
+    protected $instance: InvokeDayJs; // either returns dayjs() or dayjs.utc()
+    protected $currentDate: ParentLibType; // current date using after calling this.$instance
+    protected $timezone: MutableTimeZone; // current timezone
 
-    constructor(date?: DateArgument, timezone: MutableTimeZone = "utc") {
+    constructor(
+        date?: DateArgument,
+        timezone: MutableTimeZone = "utc",
+        strict?: boolean
+    ) {
         this.$timezone = timezone;
-        this.init(date);
+        this.init(date, strict);
     }
 
-    static isInstance(date?: DateArgument | MutableDate): date is MutableDate {
+    static isInstance(date?: MutableDateArgument): date is MutableDate {
         return isMutableDateInstance(date);
     }
 
@@ -44,17 +59,19 @@ export class MutableDate {
         return new MutableDate(date, timezone);
     }
 
-    private init(date?: DateArgument) {
+    private init(date?: DateArgument, strict?: boolean) {
         this.$instance = this.libHandler(this.$timezone);
 
+        function invokeInstance(date: any): dayjs.Dayjs {
+            return this.$instance(date, undefined, strict);
+        }
+
         if (MutableDate.isInstance(date)) {
-            this.$currentDate = this.$instance(date.toDate());
-        } else if (argumentIsNotDefined(date)) {
-            this.$currentDate = this.$instance();
+            this.$currentDate = invokeInstance(date.toDate());
         } else if (isDateInstance(date) || isDateValid(date)) {
-            this.$currentDate = this.$instance(date);
+            this.$currentDate = invokeInstance(date);
         } else {
-            this.$currentDate = this.$instance();
+            this.$currentDate = invokeInstance(new Date());
         }
     }
 
@@ -70,12 +87,10 @@ export class MutableDate {
         return this.$timezone;
     }
 
+    // dayjs provided functions
+
     toDate(): Date {
         return this.$currentDate.toDate();
-    }
-
-    toISOString(): string {
-        return this.$currentDate.toISOString();
     }
 
     toJSON(): string {
@@ -83,7 +98,15 @@ export class MutableDate {
     }
 
     toString(): string {
-        return this.$currentDate.toString();
+        return this.toDate().toString();
+    }
+
+    toISOString(): string {
+        return this.$currentDate.toISOString();
+    }
+
+    toUTCString(): string {
+        return this.toDate().toUTCString();
     }
 
     isAfter(date: MutableDateArgument, unit?: OpMutableUnitType): boolean {
@@ -119,7 +142,7 @@ export class MutableDate {
         return this.$currentDate.isBetween(start, end, unit, inclusivity);
     }
 
-    isSame(date: DateArgument, unit?: OpMutableUnitType): boolean {
+    isSame(date: MutableDateArgument, unit?: OpMutableUnitType): boolean {
         if (MutableDate.isInstance(date)) {
             return this.$currentDate.isSame(date.toDate(), unit);
         }
@@ -127,7 +150,10 @@ export class MutableDate {
         return this.$currentDate.isSame(date, unit);
     }
 
-    isSameOrAfter(date: DateArgument, unit?: OpMutableUnitType): boolean {
+    isSameOrAfter(
+        date: MutableDateArgument,
+        unit?: OpMutableUnitType
+    ): boolean {
         if (MutableDate.isInstance(date)) {
             return (
                 this.$currentDate.isSame(date.toDate(), unit) ||
@@ -138,7 +164,10 @@ export class MutableDate {
         return this.$currentDate.isSame(date, unit) || this.isAfter(date, unit);
     }
 
-    isSameOrBefore(date: DateArgument, unit?: OpMutableUnitType): boolean {
+    isSameOrBefore(
+        date: MutableDateArgument,
+        unit?: OpMutableUnitType
+    ): boolean {
         if (MutableDate.isInstance(date)) {
             return (
                 this.$currentDate.isSame(date.toDate(), unit) ||
@@ -160,7 +189,8 @@ export class MutableDate {
     }
 
     isUTC(): boolean {
-        return this.$timezone === "utc";
+        return this.$currentDate.isUTC();
+        // return this.$timezone === "utc";
     }
 
     add(value: number, unit?: ManipulateType): MutableDate {
@@ -196,10 +226,14 @@ export class MutableDate {
     }
 
     diff(
-        date?: DateArgument,
+        date?: MutableDateArgument,
         unit?: QMutableUnitType | OpMutableUnitType,
         float?: boolean
     ): number {
+        if (MutableDate.isInstance(date)) {
+            date = date.toDate();
+        }
+
         return this.$currentDate.diff(date, unit, float);
     }
 
@@ -213,7 +247,6 @@ export class MutableDate {
     }
 
     millisecond(): number;
-    millisecond(value: number): MutableDate;
     millisecond(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.millisecond();
@@ -224,7 +257,6 @@ export class MutableDate {
     }
 
     second(): number;
-    second(value: number): MutableDate;
     second(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.second();
@@ -235,7 +267,6 @@ export class MutableDate {
     }
 
     minute(): number;
-    minute(value: number): MutableDate;
     minute(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.minute();
@@ -246,7 +277,6 @@ export class MutableDate {
     }
 
     hour(): number;
-    hour(value: number): MutableDate;
     hour(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.hour();
@@ -257,7 +287,6 @@ export class MutableDate {
     }
 
     day(): number;
-    day(value: number): MutableDate;
     day(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.day();
@@ -268,7 +297,6 @@ export class MutableDate {
     }
 
     month(): number;
-    month(value: number): MutableDate;
     month(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.month();
@@ -279,7 +307,6 @@ export class MutableDate {
     }
 
     year(): number;
-    year(value: number): MutableDate;
     year(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.year();
@@ -290,7 +317,6 @@ export class MutableDate {
     }
 
     date(): number;
-    date(value: number): MutableDate;
     date(value?: number): number | MutableDate {
         if (argumentIsNotDefined(value)) {
             return this.$currentDate.date();
@@ -318,7 +344,11 @@ export class MutableDate {
         return this.$currentDate.daysInMonth();
     }
 
-    // // custom methods
+    utcOffset(): number {
+        return this.$currentDate.utcOffset();
+    }
+
+    // extended methods
 
     to(outputConversion: OutputConversionOptions) {
         if (outputConversion === "Date") {
@@ -340,25 +370,99 @@ export class MutableDate {
         return this;
     }
 
-    // getDifference(date: DateArgument) {
-    //     return {};
-    // }
+    isToday(): boolean {
+        return this.isSame(MutableDate.create().toDate(), "day");
+    }
 
-    // // isPastDate() {
-    // //     return this.isBefore(this.$instance());
-    // // }
+    isTomorrow(): boolean {
+        return this.isSame(MutableDate.create().add(1, "day").toDate(), "day");
+    }
 
-    // // isFutureDate(): boolean {
-    // //     return this.isAfter(this.$instance());
-    // // }
+    isYesterday(): boolean {
+        return this.isSame(
+            MutableDate.create().subtract(1, "day").toDate(),
+            "day"
+        );
+    }
 
-    // isEqualDate(date: DateArgument): boolean {
-    //     return this.isSame(date);
-    // }
+    isPast(): boolean {
+        return this.isBefore(MutableDate.create().toDate());
+    }
 
-    // currentTimezone(): MutableTimeZone {
-    //     return this.$timezone;
-    // }
+    isFuture(): boolean {
+        return this.isAfter(MutableDate.create().toDate());
+    }
+
+    getTime(): number {
+        return this.toDate().getTime();
+    }
+
+    toArray(): MutableDateAsArray {
+        return [
+            this.year(),
+            this.month(),
+            this.date(),
+            this.hour(),
+            this.minute(),
+            this.second(),
+            this.millisecond()
+        ];
+    }
+
+    toObject(): ParsableDuration {
+        return {
+            years: this.year(),
+            months: this.month(),
+            days: this.date(),
+            hours: this.hour(),
+            minutes: this.minute(),
+            seconds: this.second(),
+            milliseconds: this.millisecond()
+        };
+    }
+
+    getDifference(date: MutableDateArgument): ParsableDuration {
+        return getDateDifference(this.toDate(), date);
+    }
+
+    currentTimezone(): MutableTimeZone {
+        return this.$timezone;
+    }
+
+    switchTimezone(timezone: MutableTimeZone): MutableDate {
+        if (this.$timezone === timezone) {
+            return this;
+        }
+
+        // tidy this up
+
+        const offset = getTimezoneOffset(this.toDate());
+
+        if (timezone === "utc") {
+            if (offset > 0) {
+                this.$currentDate = this.$currentDate.add(offset, "minutes");
+            } else if (offset < 0) {
+                this.$currentDate = this.$currentDate.subtract(
+                    Math.abs(offset),
+                    "minutes"
+                );
+            }
+        }
+
+        if (timezone === "local") {
+            if (offset > 0) {
+                this.$currentDate = this.$currentDate.subtract(
+                    Math.abs(offset),
+                    "minutes"
+                );
+            } else if (offset < 0) {
+                this.$currentDate = this.$currentDate.add(offset, "minutes");
+            }
+        }
+
+        this.$timezone = timezone;
+        return this;
+    }
 }
 
 export function isMutableDateInstance(date: any): date is MutableDate {
