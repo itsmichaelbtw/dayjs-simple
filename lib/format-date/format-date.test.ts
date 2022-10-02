@@ -1,5 +1,6 @@
 import { describe, test, expect } from "@jest/globals";
 import { formatDate, MutableDate } from "../index";
+import { INVALID_DATE } from "../constants";
 
 describe("formatDate", () => {
     test("should return ISO format if no format string is given", () => {
@@ -14,12 +15,12 @@ describe("formatDate", () => {
 
     test("should return 'Invalid Date' if the given date is invalid", () => {
         const date = new Date("invalid");
-        expect(formatDate(date)).toBe("Invalid Date");
+        expect(formatDate(date)).toBe(INVALID_DATE);
     });
 
     test("should return 'Invalid Date' with a given template", () => {
         const date = new Date("invalid");
-        expect(formatDate(date, "YYYY-MM-DD")).toBe("Invalid Date");
+        expect(formatDate(date, "YYYY-MM-DD")).toBe(INVALID_DATE);
     });
 
     test("should format the date if the given date is a mutable date", () => {

@@ -1,6 +1,7 @@
 import { MutableDate } from "../mutable-date";
 import { isDateValid } from "../is-date-valid";
 import { MutableDateArgument } from "../types";
+import { INVALID_DATE } from "../constants";
 
 /**
  * Format a given date using the given format string. If an invalid date is
@@ -20,5 +21,5 @@ export function formatDate(
         return MutableDate.create(date).format(template);
     }
 
-    return "Invalid Date";
+    return INVALID_DATE;
 }
