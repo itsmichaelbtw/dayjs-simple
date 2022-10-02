@@ -4,13 +4,7 @@ import { MutableDate } from "./mutable-date";
 
 export type ParentLibType = dayjs.Dayjs;
 
-export type DateArgument<T = any> =
-    | T
-    | string
-    | number
-    | null
-    | undefined
-    | Date;
+export type DateArgument = string | number | null | undefined | Date;
 export type MutableDateArgument = DateArgument | MutableDate;
 export type MutableTimeZone = "local" | "utc";
 
@@ -62,3 +56,13 @@ export type OutputConversionOptions =
     | "Date"
     | "string"
     | "number";
+
+export interface ParsableDuration {
+    years: number;
+    months: number;
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    milliseconds: number;
+}
