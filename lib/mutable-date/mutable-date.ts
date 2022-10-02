@@ -62,9 +62,9 @@ export class MutableDate {
     private init(date?: DateArgument, strict?: boolean) {
         this.$instance = this.libHandler(this.$timezone);
 
-        function invokeInstance(date: any): dayjs.Dayjs {
+        const invokeInstance = (date: any): dayjs.Dayjs => {
             return this.$instance(date, undefined, strict);
-        }
+        };
 
         if (MutableDate.isInstance(date)) {
             this.$currentDate = invokeInstance(date.toDate());
