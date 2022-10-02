@@ -4,7 +4,7 @@ import { argumentIsNotDefined } from "../utils";
 
 import { UnixUnitConversion, MutableDateArgument } from "../types";
 
-function computeUnix(date: Date, unit: UnixUnitConversion) {
+export function computeUnix(date: Date, unit: UnixUnitConversion) {
     if (unit === "milliseconds") {
         return date.getTime();
     }
@@ -13,7 +13,7 @@ function computeUnix(date: Date, unit: UnixUnitConversion) {
 }
 
 /**
- * returns the unix timestamp of the given date. If no date is given, the current date is used.
+ * Returns the unix timestamp of the given date. If no date is given, the current date is used.
  */
 
 export function unixTs(

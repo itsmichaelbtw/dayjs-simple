@@ -3,7 +3,7 @@ import { argumentIsNotDefined } from "../utils";
 import { MutableDateArgument } from "../types";
 
 /**
- * returns true if the input has a valid calendar date
+ * Checks if the input is a valid date.
  */
 export function isDateValid(date: MutableDateArgument): boolean {
     if (argumentIsNotDefined(date)) {
