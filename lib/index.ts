@@ -14,3 +14,8 @@ export * from "./unix-ts";
 export * from "./increment-date";
 export * from "./decrement-date";
 export * from "./format-date";
+export * from "./get-date-difference";
+
+export * from "./types";
+
+export { ISO_8601, ISO_8601_WITH_TZ_OFFSET, LOCALE } from "./constants";
