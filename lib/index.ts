@@ -7,9 +7,11 @@ dayjs.extend(utc);
 dayjs.extend(isBetween);
 dayjs.extend(isLeapYear);
 
-export * from "./mutable-date";
 export * from "./is-date-instance";
 export * from "./is-date-valid";
+export * from "./is-am-or-pm";
+export * from "./mutable-date";
+export * from "./locale-date";
 export * from "./unix-ts";
 export * from "./increment-date";
 export * from "./decrement-date";
