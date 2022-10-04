@@ -17,7 +17,7 @@
         "release:minor": "standard-version --release-as minor",
         "release:major": "standard-version --release-as major",
         "release:dry-run": "standard-version --dry-run",
-        "publish:tag": "git push --follow-tags origin main",
+        "publish:tag": "git push origin --follow-tags",
         "prepare": "husky install"
     },
     "repository": {
