@@ -34,13 +34,14 @@ type MutableDateAsArray = [
     number,
     number
 ];
+
 export class MutableDate {
     protected $instance: InvokeDayJs; // either returns dayjs() or dayjs.utc()
     protected $currentDate: ParentLibType; // current date using after calling this.$instance
     protected $timezone: MutableTimeZone; // current timezone
 
     constructor(
-        date?: DateArgument,
+        date?: MutableDateArgument,
         timezone: MutableTimeZone = "utc",
         strict?: boolean
     ) {
@@ -48,18 +49,20 @@ export class MutableDate {
         this.init(date, strict);
     }
 
-    static isInstance(date?: MutableDateArgument): date is MutableDate {
+    static isInstance(date?: any): date is MutableDate {
         return isMutableDateInstance(date);
     }
 
-    static create(
-        date?: DateArgument,
-        timezone: MutableTimeZone = "utc"
-    ): MutableDate {
-        return new MutableDate(date, timezone);
+    static create<T extends typeof MutableDate>(
+        this: T,
+        date?: MutableDateArgument,
+        timezone: MutableTimeZone = "utc",
+        strict?: boolean
+    ): InstanceType<T> {
+        return new this(date, timezone, strict) as InstanceType<T>;
     }
 
-    private init(date?: DateArgument, strict?: boolean) {
+    private init(date?: MutableDateArgument, strict?: boolean) {
         this.$instance = this.libHandler(this.$timezone);
 
         const invokeInstance = (date: any): dayjs.Dayjs => {
@@ -462,6 +465,10 @@ export class MutableDate {
 
         this.$timezone = timezone;
         return this;
+    }
+
+    getTimezoneOffset(): number {
+        return getTimezoneOffset(this.toDate());
     }
 }
 
