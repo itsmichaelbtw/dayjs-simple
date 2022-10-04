@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/orison-networks/dayjs-simple/compare/v1.0.0...v1.1.0) (2022-10-04)
+
+
+### Features
+
+* check whether a date input is AM or PM ([9fdb5e4](https://github.com/orison-networks/dayjs-simple/commit/9fdb5e4381f5e5f7a0077af5ddab0b970cef2c51))
+* new mutable date instance allowing quick access to the locale date ([1d57792](https://github.com/orison-networks/dayjs-simple/commit/1d5779249f92e1f6b5b04e22cf6440387dd001bd))
+
+
+### Bug Fixes
+
+* incorrect typings with sub-class inheritance [#1](https://github.com/orison-networks/dayjs-simple/issues/1) ([d453649](https://github.com/orison-networks/dayjs-simple/commit/d45364905a71c5f710b754ec581b46899ea244f5))
+
 ## 1.0.0 (2022-10-02)
 
 
