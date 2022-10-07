@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/orison-networks/dayjs-simple/compare/v1.1.0...v1.1.1) (2022-10-07)
+
+
+### What's New
+
+* test commit ([d754a81](https://github.com/orison-networks/dayjs-simple/commit/d754a81cbbff4cb9560af8bd02dd6bc83cf5a22f))
+
 ## [1.1.0](https://github.com/orison-networks/dayjs-simple/compare/v1.0.0...v1.1.0) (2022-10-04)
 
 
