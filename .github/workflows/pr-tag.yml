@@ -63,14 +63,3 @@ jobs:
 
             console.log(`Pull request created: ${newPullRequest.data.html_url}.`)
           github-token: ${{ secrets.GITHUB_TOKEN }}
-    
-
-
-
-
-            
-
-
-
-
-
