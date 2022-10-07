@@ -1,23 +1,27 @@
-import dayjs from "dayjs";
-import { isDateInstance } from "../is-date-instance";
-import { DateArgumentInput } from "../utils";
+import { MutableDate } from "../mutable-date";
+import { MutableDateArgument } from "../types";
+import { getTimezoneOffset, getTimezoneString } from "../utils";
 
-export function localeDate(date?: DateArgumentInput): dayjs.Dayjs {
-    if (date === null || date === undefined) {
-        return dayjs();
+export class LocaleDate extends MutableDate {
+    constructor(date?: MutableDateArgument) {
+        super(date, "utc");
     }
 
-    if (isDateInstance(date)) {
-        return dayjs(date);
+    /**
+     * Returns the absolute difference between the local timezone and UTC in minutes.
+     */
+    static getTimezoneOffset(): number {
+        return getTimezoneOffset();
     }
 
-    return dayjs(new Date(date));
+    /**
+     * Uses `new Intl.DateTimeFormat()` to get the local timezone string. Only available in modern browsers.
+     */
+    static getTimezoneString(): string {
+        return getTimezoneString();
+    }
+
+    convertToUTC(): MutableDate {
+        return this.switchTimezone("utc");
+    }
 }
-
-class MutableDate {
-    constructor() {
-        return dayjs();
-    }
-}
-
-console.log(new MutableDate());
