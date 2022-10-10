@@ -4,7 +4,7 @@ import { getTimezoneOffset, getTimezoneString } from "../utils";
 
 export class LocaleDate extends MutableDate {
     constructor(date?: MutableDateArgument) {
-        super(date, "utc");
+        super(date, "local");
     }
 
     /**
