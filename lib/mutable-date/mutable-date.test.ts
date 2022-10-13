@@ -69,20 +69,22 @@ describe("new MutableDate", () => {
     describe("isPast()", () => {
         test("should return true if the date is in the past", () => {
             const date = new MutableDate("2020-01-01");
-            const today = new MutableDate();
+            const tomorrow = new MutableDate().add(1, "days");
 
             expect(date.isPast()).toBe(true);
-            expect(today.isPast()).toBe(false);
+            expect(tomorrow.isPast()).toBe(false);
         });
     });
 
     describe("isFuture()", () => {
         test("should return true if the date is in the future", () => {
             const date = new MutableDate("2020-01-01");
-            const today = new MutableDate();
+            const future = new MutableDate().add(1, "days");
+            const now = new MutableDate().subtract(1, "seconds");
 
             expect(date.isFuture()).toBe(false);
-            expect(today.isFuture()).toBe(false);
+            expect(future.isFuture()).toBe(true);
+            expect(now.isFuture()).toBe(false);
         });
     });
 });
