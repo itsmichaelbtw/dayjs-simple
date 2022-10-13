@@ -1,19 +1,21 @@
 {
     "compilerOptions": {
-        "lib": ["ES2015", "DOM"],
-        "module": "CommonJS",
-        "target": "ES5",
-        "moduleResolution": "Node",
+        "lib": ["es2015"],
+        "target": "es2015",
+        "declaration": true,
+        "emitDeclarationOnly": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "allowJs": true,
-        "declaration": true,
-        "skipLibCheck": true,
-        "outDir": "./dist"
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "outDir": "dist/lib",
+        "declarationDir": "dist/@types"
     },
-    "include": ["./lib"],
-    "exclude": ["**/*.test.ts", "node_modules"],
-    "ts-node": {
-        "esm": true
-    }
+    "include": [
+        "lib/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts"
+    ]
 }
