@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-import { MutableDate } from "./mutable-date";
+import type { MutableDate } from "./mutable-date";
 
 export type ParentLibType = dayjs.Dayjs;
 

@@ -1,6 +1,6 @@
 import { isDateInstance } from "./is-date-instance";
 
-import { ObjectTypes } from "./types";
+import type { ObjectTypes } from "./types";
 
 const toObjectString = Object.prototype.toString;
 
@@ -10,7 +10,7 @@ export function callObjectType(input: any): ObjectTypes {
     return objectType;
 }
 
-export function argumentIsNotDefined(input: any): boolean {
+export function argumentIsNotDefined(input: any): input is undefined | null {
     return input === undefined || input === null;
 }
 
