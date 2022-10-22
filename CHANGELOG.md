@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/orison-networks/dayjs-simple/compare/v1.2.0...v1.1.1) (2022-10-22)
+
+
+### Fixed
+
+* **ci:** actions workflow failing to create PR on tag push ([a18ba23](https://github.com/orison-networks/dayjs-simple/commit/a18ba23b333a43bd302f5349abe8ee8bcbdfeebd))
+* **localedate:** incorrect timezone argument supplied ([77828bb](https://github.com/orison-networks/dayjs-simple/commit/77828bb30574767667522fffe856a45bdd1fe3ce))
+* unit tests failing with `ms` unit comparisons ([c321e71](https://github.com/orison-networks/dayjs-simple/commit/c321e7113f765d3ad2cf54a4ba21a24afa661d7a))
+
 ## [1.1.0](https://github.com/orison-networks/dayjs-simple/compare/v1.0.0...v1.1.0) (2022-10-04)
 
 
