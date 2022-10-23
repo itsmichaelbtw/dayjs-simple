@@ -1,12 +1,47 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
 import babel from "@rollup/plugin-babel";
-import terser from "rollup-plugin-terser";
+import json from "@rollup/plugin-json";
 
 import packageJson from "./package.json";
 
+import { minify } from "terser";
+
 const extensions = [".ts"];
+const name = packageJson.name;
+const banner = `/**
+    * ${packageJson.name} v${packageJson.version}
+    * ${packageJson.homepage}
+    * (c) ${new Date().getFullYear()} ${packageJson.author}
+    * @license ${packageJson.license}
+    */
+`;
+
+async function minifyCode() {
+    return {
+        name: "terser",
+        async renderChunk(code, _, options = {}) {
+            const minified = await minify(code, {
+                module: options.format === "esm",
+                sourceMap: true,
+                toplevel: true,
+                compress: {
+                    passes: 2
+                },
+                mangle: {
+                    properties: {
+                        regex: /^_/
+                    }
+                }
+            });
+
+            return {
+                code: minified.code,
+                map: minified.map
+            };
+        }
+    };
+}
 
 export default [
     {
@@ -15,31 +50,52 @@ export default [
             {
                 file: packageJson.main,
                 format: "cjs",
-                sourcemap: true
+                sourcemap: true,
+                exports: "named",
+                generatedCode: {
+                    constBindings: true
+                },
+                banner: banner
             },
             {
                 file: packageJson.module,
                 format: "esm",
-                sourcemap: true
+                sourcemap: true,
+                exports: "named",
+                banner: banner
+            },
+            {
+                file: `dist/${name}.js`,
+                format: "umd",
+                exports: "named",
+                name: "dayjsSimple",
+                globals: {
+                    dayjs: "dayjs",
+                    "dayjs/plugin/utc": "dayjs.plugin.utc",
+                    "dayjs/plugin/isBetween": "dayjs.plugin.isBetween",
+                    "dayjs/plugin/isLeapYear": "dayjs.plugin.isLeapYear"
+                },
+                banner: banner
             }
         ],
         plugins: [
             resolve({ extensions }),
+            json(),
+            commonjs(),
             babel({
                 babelHelpers: "bundled",
                 include: ["lib/**/*.ts"],
                 extensions: extensions,
-                exclude: "node_modules/**"
+                exclude: "node_modules/**",
+                presets: ["@babel/preset-typescript", "@babel/preset-env"]
             }),
-            commonjs(),
-            typescript({
-                tsconfig: "tsconfig.json",
-                declaration: false,
-                declarationDir: null,
-                sourceMap: true
-            }),
-            terser.terser()
+            minifyCode()
         ],
-        external: ["dayjs"]
+        external: [
+            "dayjs",
+            "dayjs/plugin/utc",
+            "dayjs/plugin/isBetween",
+            "dayjs/plugin/isLeapYear"
+        ]
     }
 ];
