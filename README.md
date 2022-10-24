@@ -9,8 +9,6 @@ A top-level wrapper around the **[dayjs](https://day.js.org/)** library used wit
 
 ## Table of Contents
 
-- [dayjs-simple](#dayjs-simple)
-  - [Table of Contents](#table-of-contents)
 - [Features](#features)
 - [Motivation](#motivation)
 - [Installation](#installation)
