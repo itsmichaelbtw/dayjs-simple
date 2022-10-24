@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/orison-networks/dayjs-simple/compare/v1.1.1...v1.1.2) (2022-10-24)
+
+
+### Fixed
+
+* **mutabledate:** switching timezones not correctly updating ([29e31cc](https://github.com/orison-networks/dayjs-simple/commit/29e31ccee036a0e9f967f99822e8989953de931e))
+
 ### [1.1.1](https://github.com/orison-networks/dayjs-simple/compare/v1.2.0...v1.1.1) (2022-10-22)
 
 
