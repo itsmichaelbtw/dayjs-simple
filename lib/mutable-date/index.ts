@@ -102,7 +102,7 @@ export class MutableDate {
     }
 
     toString(): string {
-        return this.toDate().toString();
+        return this.$currentDate.toString();
     }
 
     toISOString(): string {
@@ -194,7 +194,6 @@ export class MutableDate {
 
     isUTC(): boolean {
         return this.$currentDate.isUTC();
-        // return this.$timezone === "utc";
     }
 
     add(value: number, unit?: ManipulateType): MutableDate {
@@ -354,26 +353,6 @@ export class MutableDate {
 
     // extended methods
 
-    to(outputConversion: OutputConversionOptions) {
-        if (outputConversion === "Date") {
-            return this.$currentDate.toDate() as Date;
-        }
-
-        if (outputConversion === "MutableDate") {
-            return this as MutableDate;
-        }
-
-        if (outputConversion === "number") {
-            return this.$currentDate.valueOf() as number;
-        }
-
-        if (outputConversion === "string") {
-            return this.$currentDate.toISOString() as string;
-        }
-
-        return this;
-    }
-
     isToday(): boolean {
         return this.isSame(MutableDate.create().toDate(), "day");
     }
@@ -433,35 +412,34 @@ export class MutableDate {
         return this.$timezone;
     }
 
-    // currently broken
     switchTimezone(timezone: MutableTimeZone): MutableDate {
         if (this.$timezone === timezone) {
             return this;
         }
 
-        // tidy this up
-
         const offset = getTimezoneOffset(this.toDate());
+
+        const subtract = (offset: number) => {
+            return this.$currentDate.subtract(offset, "minutes");
+        };
+
+        const add = (offset: number) => {
+            return this.$currentDate.add(absolute(offset), "minutes");
+        };
 
         if (timezone === "utc") {
             if (offset > 0) {
-                this.$currentDate = this.$currentDate.add(offset, "minutes");
+                this.$currentDate = subtract(offset);
             } else if (offset < 0) {
-                this.$currentDate = this.$currentDate.subtract(
-                    Math.abs(offset),
-                    "minutes"
-                );
+                this.$currentDate = add(offset);
             }
         }
 
         if (timezone === "local") {
             if (offset > 0) {
-                this.$currentDate = this.$currentDate.subtract(
-                    Math.abs(offset),
-                    "minutes"
-                );
+                this.$currentDate = add(offset);
             } else if (offset < 0) {
-                this.$currentDate = this.$currentDate.add(offset, "minutes");
+                this.$currentDate = subtract(offset);
             }
         }
 

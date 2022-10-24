@@ -46,7 +46,7 @@ describe("getDateDifference", () => {
             years: 0,
             months: 0,
             days: -1,
-            hours: 0,
+            hours: -22,
             minutes: 0,
             seconds: 0,
             milliseconds: 0
