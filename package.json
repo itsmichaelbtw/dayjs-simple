@@ -1,6 +1,6 @@
 {
     "name": "dayjs-simple",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "A top-level wrapper around the dayjs library",
     "main": "dist/cjs/dayjs-simple.js",
     "module": "dist/esm/dayjs-simple.js",
